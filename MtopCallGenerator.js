@@ -20,11 +20,33 @@ const MtopCallGenerator = function () {
     this.generate = function (context, requests, options) {
         const requestConfig = requests[0].urlParameters || {};
         requestConfig.type = requests[0].method || 'GET';
+        fixObjectType(requestConfig);
+
         requestConfig.data = getBody(requests[0]);
         deleteTransientKeys(requestConfig);
 
         return template(requestConfig, extractGlobalConfig(requests[0]));
     }
+}
+
+/**
+ * Fix type for integer and boolean values.
+ * Intentionally ignoring float here since values like "1.0" are ambiguous in their type (it can be both a string and a number).
+ */
+function fixObjectType(obj) {
+    if (typeof obj !== 'object' || Array.isArray(obj)) {
+        return;
+    }
+
+    Object.keys(obj).forEach(key => {
+        const value = obj[key];
+
+        if (/^[-+]?(\d+|Infinity)$/.test(value)) {
+            obj[key] = Number(value);
+        } else if (/^(true|false)$/.test(value)) {
+            obj[key] = Boolean(value);
+        }
+    });
 }
 
 /**
