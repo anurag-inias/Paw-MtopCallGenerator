@@ -1,5 +1,5 @@
 ## About
-[Paw](https://paw.cloud/) extension to generate Mtop call code.
+[Paw](https://paw.cloud/) extension to generate code for Mtop call. Mtop is a browser based wrapper used by Alibaba family (Lazada, Taobao etc) for http calls. 
 
 ## How to use
 1. Open network tab in your browser.
